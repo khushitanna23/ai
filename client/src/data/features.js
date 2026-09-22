@@ -1,0 +1,58 @@
+export const features = [
+  {
+    id: 'answering',
+    title: '24/7 Call Answering',
+    description: "Answer customer calls even when your team isn't available, eliminating missed revenue and voicemail delays.",
+    icon: 'PhoneCall',
+    highlight: 'Always On',
+  },
+  {
+    id: 'qualification',
+    title: 'AI Lead Qualification',
+    description: 'Ask the right questions and collect valuable lead information to prioritize high-intent prospects.',
+    icon: 'UserCheck',
+    highlight: 'Smart Scoring',
+  },
+  {
+    id: 'booking',
+    title: 'Appointment Booking',
+    description: 'Allow customers to schedule appointments automatically according to your custom calendar rules.',
+    icon: 'CalendarCheck',
+    highlight: 'Direct Calendar Sync',
+  },
+  {
+    id: 'transfer',
+    title: 'Intelligent Call Transfer',
+    description: 'Route important calls and high-priority emergencies to the right person or department instantly.',
+    icon: 'PhoneForwarded',
+    highlight: 'Instant Handoff',
+  },
+  {
+    id: 'knowledge',
+    title: 'Custom Business Knowledge',
+    description: 'Train Vedanco AI with your services, FAQs, hours, and approved information for accurate answers.',
+    icon: 'BookOpen',
+    highlight: 'Tailored Training',
+  },
+  {
+    id: 'sms',
+    title: 'SMS Follow-Up',
+    description: 'Automatically follow up with callers via text with booking links, confirmation details, or directions.',
+    icon: 'MessageSquare',
+    highlight: 'Automated Texts',
+  },
+  {
+    id: 'crm',
+    title: 'CRM Integration',
+    description: 'Connect captured leads directly with your existing CRM or workflow (HubSpot, Salesforce, ServiceTitan).',
+    icon: 'Database',
+    highlight: 'Seamless Sync',
+  },
+  {
+    id: 'summaries',
+    title: 'Call Summaries',
+    description: 'Get structured information, transcriptions, caller intent, and action items from customer conversations.',
+    icon: 'FileText',
+    highlight: 'Actionable Insights',
+  },
+];

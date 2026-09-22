@@ -1,0 +1,21 @@
+{
+  "name": "vedanco-ai-platform",
+  "version": "1.0.0",
+  "description": "Vedanco AI - 24/7 AI Receptionist for US Businesses (MERN Stack)",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently -k -p \"[{name}]\" -n \"SERVER,CLIENT\" -c \"yellow.bold,cyan.bold\" \"npm run dev:server\" \"npm run dev:client\"",
+    "build:client": "npm run build --prefix client",
+    "seed": "npm run seed --prefix server",
+    "start": "npm start --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.6"
+  }
+}
