@@ -25,13 +25,13 @@ export default function Footer({ onOpenDemo }) {
   ];
 
   return (
-    <footer className="bg-[#050814] text-slate-400 py-16 border-t border-slate-800 text-xs sm:text-sm">
+    <footer className="bg-[#050814] text-slate-400 py-12 sm:py-16 border-t border-slate-800 text-xs sm:text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 mb-8 sm:mb-12">
           {/* Brand Col matching Image 2 */}
           <div className="lg:col-span-2 space-y-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-[#0B1120] border border-slate-800 flex items-center justify-center shadow-md">
+              <div className="w-8 h-8 rounded-xl bg-[#0B1120] border border-slate-800 flex items-center justify-center shadow-md shrink-0">
                 <div className="flex items-center gap-1">
                   <span className="w-1 h-3.5 bg-blue-500 rounded-full" />
                   <span className="w-1 h-5 bg-blue-400 rounded-full" />
@@ -69,10 +69,10 @@ export default function Footer({ onOpenDemo }) {
 
           {/* Solutions Col */}
           <div>
-            <h4 className="text-[11px] font-bold text-white uppercase tracking-wider mb-4 font-mono">
+            <h4 className="text-[11px] font-bold text-white uppercase tracking-wider mb-3 sm:mb-4 font-mono">
               SOLUTIONS
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2 sm:space-y-2.5 text-xs">
               {solutions.map((item, idx) => (
                 <li key={idx}>
                   <a
@@ -88,10 +88,10 @@ export default function Footer({ onOpenDemo }) {
 
           {/* Company Col */}
           <div>
-            <h4 className="text-[11px] font-bold text-white uppercase tracking-wider mb-4 font-mono">
+            <h4 className="text-[11px] font-bold text-white uppercase tracking-wider mb-3 sm:mb-4 font-mono">
               COMPANY
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2 sm:space-y-2.5 text-xs">
               {company.map((item, idx) => (
                 <li key={idx}>
                   {item.isDemo ? (
@@ -116,10 +116,10 @@ export default function Footer({ onOpenDemo }) {
 
           {/* Legal & Trust Col matching Image 2 */}
           <div>
-            <h4 className="text-[11px] font-bold text-white uppercase tracking-wider mb-4 font-mono">
+            <h4 className="text-[11px] font-bold text-white uppercase tracking-wider mb-3 sm:mb-4 font-mono">
               LEGAL & TRUST
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2 sm:space-y-2.5 text-xs">
               {legal.map((item, idx) => (
                 <li key={idx}>
                   <a
@@ -135,11 +135,11 @@ export default function Footer({ onOpenDemo }) {
         </div>
 
         {/* Bottom Bar matching Image 2 */}
-        <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-6 sm:pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-slate-500 text-center sm:text-left">
           <div>
             © 2026 Vedanco AI (ai.vedanco.com). All rights reserved.
           </div>
-          <div className="flex items-center gap-3 text-[11px] font-mono">
+          <div className="flex items-center gap-2.5 sm:gap-3 text-[10px] sm:text-[11px] font-mono">
             <span className="flex items-center gap-1.5 text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               All Systems Operational

@@ -46,45 +46,45 @@ export default function ProblemCards() {
   ];
 
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-14 sm:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
           <span className="text-xs font-bold text-electric-600 uppercase tracking-wider bg-electric-50 px-3 py-1 rounded-full border border-electric-100">
             The Cost of Missed Calls
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight mt-3">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-navy-900 tracking-tight mt-3">
             Every Missed Call Is an Opportunity You Never Get Back.
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-charcoal-600">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-charcoal-600">
             Traditional phone setups leak high-intent leads daily. Here are the five systemic bottlenecks hurting growing US businesses.
           </p>
         </div>
 
         {/* 5 Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {problems.map((prob) => {
             const Icon = prob.icon;
             return (
               <div
                 key={prob.id}
-                className="group relative bg-slate-50/70 hover:bg-white rounded-3xl p-7 border border-slate-200/80 hover:border-electric-400 hover:shadow-xl hover:shadow-electric-500/5 transition-all duration-300 flex flex-col justify-between"
+                className="group relative bg-slate-50/70 hover:bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-200/80 hover:border-electric-400 hover:shadow-xl hover:shadow-electric-500/5 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 group-hover:bg-electric-50 group-hover:border-electric-200 flex items-center justify-center transition-colors shadow-sm">
-                      <Icon className="w-6 h-6 text-navy-900 group-hover:text-electric-600 transition-colors" />
+                  <div className="flex items-center justify-between mb-4 sm:mb-5">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white border border-slate-200 group-hover:bg-electric-50 group-hover:border-electric-200 flex items-center justify-center transition-colors shadow-sm shrink-0">
+                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-navy-900 group-hover:text-electric-600 transition-colors" />
                     </div>
-                    <span className="text-[11px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full bg-slate-200/60 text-slate-700">
+                    <span className="text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full bg-slate-200/60 text-slate-700">
                       {prob.tag}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-navy-900 mb-2">{prob.title}</h3>
-                  <p className="font-medium text-electric-700 text-sm mb-2">{prob.desc}</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-navy-900 mb-1.5 sm:mb-2">{prob.title}</h3>
+                  <p className="font-medium text-electric-700 text-xs sm:text-sm mb-2">{prob.desc}</p>
                   <p className="text-xs text-charcoal-500 leading-relaxed">{prob.detail}</p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-400 font-medium">
+                <div className="mt-5 sm:mt-6 pt-3 sm:pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-400 font-medium">
                   <span>Bottleneck 0{prob.id}</span>
                   <span className="text-rose-500 font-semibold">High Friction</span>
                 </div>
@@ -93,20 +93,20 @@ export default function ProblemCards() {
           })}
 
           {/* 6th Card: Vedanco Advantage */}
-          <div className="bg-gradient-to-br from-navy-900 to-navy-800 text-white rounded-3xl p-7 border border-slate-800 shadow-xl flex flex-col justify-between">
+          <div className="bg-gradient-to-br from-navy-900 to-navy-800 text-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-800 shadow-xl flex flex-col justify-between">
             <div>
-              <div className="text-xs font-bold text-electric-400 uppercase tracking-wider mb-2">
+              <div className="text-[10px] sm:text-xs font-bold text-electric-400 uppercase tracking-wider mb-2">
                 VEDANCO ADVANTAGE
               </div>
-              <h3 className="text-2xl font-black text-white mb-3">
+              <h3 className="text-xl sm:text-2xl font-black text-white mb-2 sm:mb-3">
                 Stop losing customers to voicemail.
               </h3>
-              <p className="text-slate-300 text-sm leading-relaxed">
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                 Deploy an intelligent receptionist in days. Handle unlimited simultaneous calls, qualify leads instantly, and keep your calendar booked.
               </p>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+            <div className="mt-5 sm:mt-6 pt-3 sm:pt-4 border-t border-white/10 flex items-center justify-between">
               <span className="text-xs text-emerald-400 font-semibold">● 100% Call Coverage</span>
               <a
                 href="#live-demo"

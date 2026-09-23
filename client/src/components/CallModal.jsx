@@ -20,19 +20,19 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/75 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-lg rounded-3xl bg-[#0B1120] text-white p-6 sm:p-8 shadow-2xl border border-slate-800 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-navy-950/75 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-3xl bg-[#0B1120] text-white p-5 sm:p-8 shadow-2xl border border-slate-800 text-center">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="w-16 h-16 rounded-3xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center mx-auto mb-5 shadow-lg">
-          <Phone className="w-8 h-8 animate-pulse text-blue-400" />
+        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center mx-auto mb-4 sm:mb-5 shadow-lg">
+          <Phone className="w-7 h-7 sm:w-8 sm:h-8 animate-pulse text-blue-400" />
         </div>
 
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/40 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-3">
@@ -40,11 +40,11 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
           <span>Interactive AI Receptionist</span>
         </div>
 
-        <h3 className="text-2xl font-black text-white">
+        <h3 className="text-xl sm:text-2xl font-black text-white">
           Experience Live AI Receptionist
         </h3>
 
-        <p className="text-xs sm:text-sm text-slate-300 mt-2 mb-6 leading-relaxed max-w-sm mx-auto">
+        <p className="text-xs sm:text-sm text-slate-300 mt-2 mb-5 sm:mb-6 leading-relaxed max-w-sm mx-auto">
           Test our natural conversational voice engine right in your browser, or schedule a customized live demo call with our specialist.
         </p>
 

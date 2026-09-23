@@ -34,46 +34,46 @@ export default function WhyVedanco() {
   ];
 
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-14 sm:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
           <span className="text-xs font-bold text-electric-600 uppercase tracking-wider bg-electric-50 px-3 py-1 rounded-full border border-electric-100">
             The Vedanco Difference
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight mt-3">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-navy-900 tracking-tight mt-3">
             More Than an AI Voice.
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-charcoal-600">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-charcoal-600">
             Vedanco doesn't simply give you a phone bot. We build and manage a complete AI receptionist system around your business.
           </p>
         </div>
 
         {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {pillars.map((pillar) => {
             const Icon = pillar.icon;
             return (
               <div
                 key={pillar.id}
-                className="bg-slate-50 rounded-3xl p-7 border border-slate-200 shadow-sm hover:shadow-xl hover:border-electric-400 hover:bg-white transition-all duration-300 flex flex-col justify-between"
+                className="bg-slate-50 rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-sm hover:shadow-xl hover:border-electric-400 hover:bg-white transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-electric-50 text-electric-600 flex items-center justify-center shadow-sm">
-                      <Icon className="w-6 h-6" />
+                  <div className="flex items-center justify-between mb-4 sm:mb-5">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-electric-50 text-electric-600 flex items-center justify-center shadow-sm shrink-0">
+                      <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <span className="text-xs font-extrabold tracking-widest text-slate-400 uppercase font-mono">
+                    <span className="text-[11px] sm:text-xs font-extrabold tracking-widest text-slate-400 uppercase font-mono">
                       {pillar.title}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-navy-900 mb-2">{pillar.heading}</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-navy-900 mb-1.5 sm:mb-2">{pillar.heading}</h3>
                   <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
                     {pillar.desc}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-200/60 text-xs font-semibold text-electric-600">
+                <div className="mt-5 sm:mt-6 pt-3.5 sm:pt-4 border-t border-slate-200/60 text-xs font-semibold text-electric-600">
                   Managed By Vedanco AI
                 </div>
               </div>

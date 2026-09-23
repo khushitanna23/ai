@@ -59,12 +59,12 @@ export default function DemoModal({ isOpen, onClose }) {
             height="100%"
             frameBorder="0"
             title="Book a Call with Vedanco AI"
-            className="w-full h-full border-0 min-h-[480px]"
+            className="w-full h-full border-0 min-h-[360px] sm:min-h-[480px]"
           />
         </div>
 
         {/* Bottom Note */}
-        <div className="pt-2 px-1 flex items-center justify-between text-[11px] text-slate-500">
+        <div className="pt-2 px-1 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-500 gap-1 text-center sm:text-left">
           <span>Powered by Calendly • Automated calendar invitations & confirmations</span>
           <a
             href={CALENDLY_URL}

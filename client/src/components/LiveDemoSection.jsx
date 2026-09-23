@@ -285,42 +285,42 @@ export default function LiveDemoSection({ onOpenDemo }) {
   };
 
   return (
-    <section id="live-demo" className="py-24 bg-[#070C1E] text-white relative overflow-hidden">
+    <section id="live-demo" className="py-14 sm:py-24 bg-[#070C1E] text-white relative overflow-hidden">
       {/* Background soft glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header matching Image 1 */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-950/80 border border-blue-500/40 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-4">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 rounded-full bg-blue-950/80 border border-blue-500/40 text-blue-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-3 sm:mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping" />
             <span>INTERACTIVE VOICE RECEPTIONIST DEMO</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white">
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
             Don't Just Read About It.{' '}
             <span className="text-blue-500 block sm:inline">Talk to It.</span>
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-slate-300">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-slate-300">
             Experience how Vedanco AI can handle a real customer conversation.
           </p>
 
-          <div className="mt-4 flex items-center justify-center gap-3 text-xs text-slate-400">
+          <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-slate-400">
             <span className="inline-flex items-center gap-1.5 text-emerald-400 font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               Available 24/7
             </span>
-            <span>•</span>
+            <span className="hidden sm:inline">•</span>
             <span>No signup required. Experience the demo yourself.</span>
           </div>
         </div>
 
         {/* Top Toggle Pills matching Image 1 */}
-        <div className="flex items-center justify-center gap-3 mb-10">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 max-w-md sm:max-w-none mx-auto">
           <button
             onClick={() => setActiveTab('interactive')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'interactive'
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                 : 'bg-[#0B1120] text-slate-400 hover:text-white border border-slate-800'
@@ -332,7 +332,7 @@ export default function LiveDemoSection({ onOpenDemo }) {
 
           <button
             onClick={() => setActiveTab('telephony')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'telephony'
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                 : 'bg-[#0B1120] text-slate-400 hover:text-white border border-slate-800'
@@ -344,12 +344,12 @@ export default function LiveDemoSection({ onOpenDemo }) {
         </div>
 
         {/* Scenarios Row matching Image 1 */}
-        <div className="mb-10">
+        <div className="mb-8 sm:mb-10">
           <div className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
             CHOOSE A BUSINESS CONTEXT TO TEST (OR ASK ANY CUSTOM QUESTION):
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 max-w-5xl mx-auto">
             {Object.values(scenariosData).map((sc) => {
               const isSelected = selectedScenarioKey === sc.id;
               const Icon = sc.icon;
@@ -357,15 +357,15 @@ export default function LiveDemoSection({ onOpenDemo }) {
                 <button
                   key={sc.id}
                   onClick={() => setSelectedScenarioKey(sc.id)}
-                  className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between ${
+                  className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border text-left transition-all flex flex-col justify-between ${
                     isSelected
                       ? 'bg-blue-950/40 border-2 border-blue-500 shadow-md shadow-blue-500/20'
                       : 'bg-[#0B1120] border-slate-800/90 hover:border-slate-700 hover:bg-[#0e162a]'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-white">{sc.name}</span>
-                    <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-blue-400' : 'text-slate-500'}`} />
+                    <span className="text-xs font-bold text-white truncate mr-1">{sc.name}</span>
+                    <Icon className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-blue-400' : 'text-slate-500'}`} />
                   </div>
                   <span className="text-[10px] text-slate-400 truncate block">
                     {sc.company}
@@ -377,51 +377,51 @@ export default function LiveDemoSection({ onOpenDemo }) {
         </div>
 
         {/* Main Two-Column Interactive Layout matching Image 1 */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch mb-6 sm:mb-8 max-w-6xl mx-auto">
           {/* LEFT COLUMN: Phone Call Visualizer Card (VEDANCO VOICE) */}
-          <div className="lg:col-span-4 rounded-3xl bg-[#0B1120] border border-slate-800 p-6 flex flex-col justify-between shadow-2xl">
+          <div className="lg:col-span-4 rounded-2xl sm:rounded-3xl bg-[#0B1120] border border-slate-800 p-4 sm:p-6 flex flex-col justify-between shadow-2xl">
             <div>
               {/* Header inside Left Card */}
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+              <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-800 mb-4 sm:mb-6">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold tracking-wider uppercase text-white font-mono">
                     VEDANCO VOICE
                   </span>
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-[11px] font-semibold">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-[10px] sm:text-[11px] font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span>Live Demo Active</span>
                 </div>
               </div>
 
               {/* Central Graphic with Scenario Icon & Details */}
-              <div className="text-center py-4">
-                <div className="relative w-20 h-20 mx-auto rounded-full bg-blue-600/10 border-2 border-blue-500/40 flex items-center justify-center text-blue-400 mb-4 shadow-inner shadow-blue-500/20">
-                  <ScenarioIcon className="w-8 h-8 text-blue-400" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-500 border-2 border-[#0B1120] animate-ping" />
+              <div className="text-center py-2 sm:py-4">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-blue-600/10 border-2 border-blue-500/40 flex items-center justify-center text-blue-400 mb-3 sm:mb-4 shadow-inner shadow-blue-500/20">
+                  <ScenarioIcon className="w-7 h-7 sm:w-8 sm:h-8 text-blue-400" />
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-blue-500 border-2 border-[#0B1120] animate-ping" />
                 </div>
 
-                <h3 className="text-lg font-bold text-white">{scenario.name}</h3>
+                <h3 className="text-base sm:text-lg font-bold text-white">{scenario.name}</h3>
                 <p className="text-xs font-medium text-blue-400 mt-0.5">{scenario.company}</p>
-                <p className="text-[11px] text-slate-400 mt-1 max-w-[200px] mx-auto leading-relaxed">
+                <p className="text-[10px] sm:text-[11px] text-slate-400 mt-1 max-w-[200px] mx-auto leading-relaxed">
                   {scenario.location}
                 </p>
               </div>
 
               {/* Waveform Section */}
-              <div className="mt-6 bg-[#070C1E] rounded-2xl p-4 border border-slate-800/80">
-                <div className="flex items-center justify-between text-[11px] text-slate-400 mb-2">
+              <div className="mt-4 sm:mt-6 bg-[#070C1E] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-800/80">
+                <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400 mb-2">
                   <span className="font-bold tracking-wider uppercase font-mono">VOICE ENGINE</span>
                   <span className="text-emerald-400 font-mono">00:{String(callDuration).padStart(2, '0')}</span>
                 </div>
 
                 {/* Animated Equalizer Waveform */}
-                <div className="flex items-center justify-between gap-1 h-10 px-2">
+                <div className="flex items-center justify-between gap-0.5 sm:gap-1 h-9 sm:h-10 px-1 sm:px-2 overflow-hidden">
                   {[8, 14, 24, 10, 28, 18, 12, 22, 16, 26, 20, 14, 30, 18, 24, 12, 20, 16, 22, 10, 14, 8].map(
                     (h, i) => (
                       <span
                         key={i}
-                        className={`w-1 rounded-full transition-all duration-300 ${
+                        className={`w-1 rounded-full transition-all duration-300 shrink-0 ${
                           isSpeaking ? 'bg-blue-400 animate-waveform' : 'bg-blue-500/70 h-3'
                         }`}
                         style={{
@@ -433,15 +433,15 @@ export default function LiveDemoSection({ onOpenDemo }) {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-800/60 mt-2 font-mono">
-                  <span>Voice Status: {isSpeaking ? 'Speaking...' : isThinking ? 'Thinking...' : 'Ready'}</span>
+                <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-slate-400 pt-2 border-t border-slate-800/60 mt-2 font-mono">
+                  <span>Voice: {isSpeaking ? 'Speaking...' : isThinking ? 'Thinking...' : 'Ready'}</span>
                   <span className="text-blue-400">Latency: 380ms</span>
                 </div>
               </div>
             </div>
 
             {/* Audio Toggle & Reset Button */}
-            <div className="mt-6 space-y-2">
+            <div className="mt-4 sm:mt-6 space-y-2">
               <button
                 onClick={() => setSoundEnabled(!soundEnabled)}
                 className={`w-full py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-colors ${
@@ -465,45 +465,45 @@ export default function LiveDemoSection({ onOpenDemo }) {
           </div>
 
           {/* RIGHT COLUMN: Live Speech Transcript & User Input matching Image 1 */}
-          <div className="lg:col-span-8 rounded-3xl bg-[#0B1120] border border-slate-800 flex flex-col justify-between shadow-2xl overflow-hidden">
+          <div className="lg:col-span-8 rounded-2xl sm:rounded-3xl bg-[#0B1120] border border-slate-800 flex flex-col justify-between shadow-2xl overflow-hidden">
             {/* Transcript Header */}
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-[#0B1120]">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-800 flex items-center justify-between bg-[#0B1120]">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                 <span className="text-xs font-bold tracking-wider uppercase text-white font-mono">
                   LIVE SPEECH TRANSCRIPT
                 </span>
               </div>
-              <span className="text-[11px] text-slate-400 font-mono">
-                {messages.length} {messages.length === 1 ? 'message' : 'messages'} • English
+              <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono">
+                {messages.length} {messages.length === 1 ? 'message' : 'messages'}
               </span>
             </div>
 
             {/* Messages Scroll Area */}
-            <div className="p-5 sm:p-6 min-h-[300px] max-h-[380px] overflow-y-auto space-y-4 bg-[#070C1E]/60">
+            <div className="p-3.5 sm:p-6 min-h-[250px] sm:min-h-[300px] max-h-[360px] overflow-y-auto space-y-3.5 sm:space-y-4 bg-[#070C1E]/60">
               {messages.map((msg) => {
                 const isAi = msg.sender === 'ai';
                 return (
                   <div
                     key={msg.id}
-                    className={`flex items-start gap-3 ${isAi ? 'justify-start' : 'justify-end'}`}
+                    className={`flex items-start gap-2.5 sm:gap-3 ${isAi ? 'justify-start' : 'justify-end'}`}
                   >
                     {isAi && (
-                      <div className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center shrink-0 text-blue-400 mt-1">
-                        <Bot className="w-4 h-4" />
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center shrink-0 text-blue-400 mt-1">
+                        <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
                     )}
 
-                    <div className={`max-w-[85%] flex flex-col ${isAi ? 'items-start' : 'items-end'}`}>
-                      <div className="flex items-center gap-2 mb-1 px-1">
-                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">
+                    <div className={`max-w-[92%] sm:max-w-[85%] flex flex-col ${isAi ? 'items-start' : 'items-end'}`}>
+                      <div className="flex items-center gap-1.5 sm:gap-2 mb-1 px-1">
+                        <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wide">
                           {msg.name}
                         </span>
-                        <span className="text-[10px] text-slate-500 font-mono">{msg.timestamp}</span>
+                        <span className="text-[9px] sm:text-[10px] text-slate-500 font-mono">{msg.timestamp}</span>
                       </div>
 
                       <div
-                        className={`p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
+                        className={`p-3 sm:p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
                           isAi
                             ? 'bg-[#131C31] text-slate-100 border border-slate-800 rounded-tl-sm shadow-sm'
                             : 'bg-blue-600 text-white font-medium rounded-tr-sm shadow-md'
@@ -514,8 +514,8 @@ export default function LiveDemoSection({ onOpenDemo }) {
                     </div>
 
                     {!isAi && (
-                      <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 text-slate-300 mt-1">
-                        <User className="w-4 h-4" />
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 text-slate-300 mt-1">
+                        <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
                     )}
                   </div>
@@ -523,12 +523,12 @@ export default function LiveDemoSection({ onOpenDemo }) {
               })}
 
               {isThinking && (
-                <div className="flex items-start gap-3 justify-start animate-fadeIn">
-                  <div className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center shrink-0 text-blue-400 mt-1">
-                    <Bot className="w-4 h-4" />
+                <div className="flex items-start gap-2.5 sm:gap-3 justify-start animate-fadeIn">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center shrink-0 text-blue-400 mt-1">
+                    <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </div>
-                  <div className="bg-[#131C31] border border-slate-800 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2 text-xs text-slate-300">
-                    <span className="text-slate-400 font-medium">Vedanco AI is thinking</span>
+                  <div className="bg-[#131C31] border border-slate-800 rounded-2xl rounded-tl-sm px-3.5 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 text-xs text-slate-300">
+                    <span className="text-slate-400 font-medium text-xs">Vedanco AI is thinking</span>
                     <div className="flex items-center gap-1">
                       <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:0s]" />
                       <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:0.2s]" />
@@ -542,17 +542,17 @@ export default function LiveDemoSection({ onOpenDemo }) {
             </div>
 
             {/* Suggested Examples Row matching Image 1 */}
-            <div className="px-5 py-3 bg-[#0B1120] border-t border-slate-800/80">
+            <div className="px-3.5 sm:px-5 py-2.5 sm:py-3 bg-[#0B1120] border-t border-slate-800/80">
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                 SUGGESTED EXAMPLES IN THIS SCENARIO:
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 text-xs">
                 {scenario.suggestedExamples.map((promptText, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleSendMessage(promptText)}
                     disabled={isThinking}
-                    className="truncate text-left px-3 py-2 rounded-xl bg-[#070C1E] hover:bg-blue-600/10 hover:border-blue-500/40 border border-slate-800 text-slate-300 hover:text-white text-xs transition-colors disabled:opacity-50"
+                    className="truncate text-left px-3 py-2 rounded-xl bg-[#070C1E] hover:bg-blue-600/10 hover:border-blue-500/40 border border-slate-800 text-slate-300 hover:text-white text-[11px] sm:text-xs transition-colors disabled:opacity-50"
                   >
                     "{promptText}"
                   </button>
@@ -561,13 +561,13 @@ export default function LiveDemoSection({ onOpenDemo }) {
             </div>
 
             {/* User Input Area matching Image 1 */}
-            <div className="p-4 sm:p-5 bg-[#0B1120] border-t border-slate-800">
+            <div className="p-3 sm:p-5 bg-[#0B1120] border-t border-slate-800">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendMessage();
                 }}
-                className="flex items-center gap-2.5"
+                className="flex items-center gap-2 sm:gap-2.5"
               >
                 <div className="relative flex-1">
                   <input
@@ -577,7 +577,7 @@ export default function LiveDemoSection({ onOpenDemo }) {
                     onChange={(e) => setInputQuery(e.target.value)}
                     placeholder="Ask Vedanco AI anything..."
                     disabled={isThinking}
-                    className="w-full pl-4 pr-10 py-3 rounded-xl bg-[#070C1E] border border-slate-800 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors disabled:opacity-60"
+                    className="w-full pl-3.5 sm:pl-4 pr-9 sm:pr-10 py-2.5 sm:py-3 rounded-xl bg-[#070C1E] border border-slate-800 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors disabled:opacity-60"
                   />
                   <button
                     type="button"
@@ -592,7 +592,7 @@ export default function LiveDemoSection({ onOpenDemo }) {
                 <button
                   type="submit"
                   disabled={!inputQuery.trim() || isThinking}
-                  className="inline-flex items-center justify-center gap-1.5 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-800 disabled:text-slate-500 text-white font-semibold text-xs sm:text-sm shadow-md transition-all active:scale-95 shrink-0"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-800 disabled:text-slate-500 text-white font-semibold text-xs sm:text-sm shadow-md transition-all active:scale-95 shrink-0"
                 >
                   <span>Send</span>
                   <Send className="w-3.5 h-3.5" />
@@ -603,40 +603,40 @@ export default function LiveDemoSection({ onOpenDemo }) {
         </div>
 
         {/* Bottom Structured Call Intelligence Card matching Image 1 */}
-        <div className="max-w-6xl mx-auto rounded-3xl bg-[#0B1120] border border-slate-800 p-5 sm:p-6 shadow-xl">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+        <div className="max-w-6xl mx-auto rounded-2xl sm:rounded-3xl bg-[#0B1120] border border-slate-800 p-4 sm:p-6 shadow-xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-3.5 sm:pb-4 border-b border-slate-800 mb-4">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               <span className="text-xs font-bold uppercase tracking-wider text-white font-mono">
                 REAL-TIME STRUCTURED CALL INTELLIGENCE
               </span>
             </div>
-            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/70 border border-emerald-500/40 px-2.5 py-1 rounded-full">
+            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/70 border border-emerald-500/40 px-2.5 py-0.5 rounded-full">
               Live CRM Sync: Active
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono mb-4">
-            <div className="bg-[#070C1E] p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs font-mono mb-4">
+            <div className="bg-[#070C1E] p-3 sm:p-3.5 rounded-xl border border-slate-800/80 space-y-1">
               <div className="text-slate-400 text-[10px] uppercase font-bold">CALLER INTENT & DATA</div>
               <div className="text-white font-semibold">{currentIntent}</div>
               <div className="text-slate-400 text-[11px]">Caller: Inbound Caller • +1 (555) 234-1921</div>
             </div>
 
-            <div className="bg-[#070C1E] p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+            <div className="bg-[#070C1E] p-3 sm:p-3.5 rounded-xl border border-slate-800/80 space-y-1">
               <div className="text-slate-400 text-[10px] uppercase font-bold">QUALIFIED STATUS</div>
               <div className="text-emerald-400 font-semibold">{qualificationStatus}</div>
               <div className="text-slate-400 text-[11px]">Workflow: Auto-Book + SMS Confirmation Ready</div>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-3 text-xs text-center sm:text-left">
             <span className="text-slate-400">
               Need custom call flows for your specific business?
             </span>
             <button
               onClick={onOpenDemo}
-              className="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 transition-colors"
+              className="text-blue-400 hover:text-blue-300 font-semibold flex items-center justify-center gap-1 transition-colors"
             >
               <span>Book Free Custom Demo</span>
               <ArrowRight className="w-3.5 h-3.5" />

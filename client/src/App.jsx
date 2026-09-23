@@ -38,7 +38,7 @@ export default function App() {
   const handleCloseCall = () => setIsCallModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-white text-navy-900 font-sans selection:bg-electric-600 selection:text-white">
+    <div className="min-h-screen w-full overflow-x-hidden bg-white text-navy-900 font-sans selection:bg-electric-600 selection:text-white">
       {/* Sticky Navigation */}
       <Navbar onOpenDemo={handleOpenDemo} onOpenCall={handleOpenCall} />
 
