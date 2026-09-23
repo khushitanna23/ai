@@ -24,7 +24,14 @@ export default function App() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isCallModalOpen, setIsCallModalOpen] = useState(false);
 
-  const handleOpenDemo = () => setIsDemoModalOpen(true);
+  const CALENDLY_URL = 'https://calendly.com/nachiketdpatel/book-your-free-15-min-call-with-nachiket';
+
+  const handleOpenDemo = () => {
+    const win = window.open(CALENDLY_URL, '_blank', 'noopener,noreferrer');
+    if (!win || win.closed || typeof win.closed === 'undefined') {
+      setIsDemoModalOpen(true);
+    }
+  };
   const handleCloseDemo = () => setIsDemoModalOpen(false);
 
   const handleOpenCall = () => setIsCallModalOpen(true);
@@ -91,7 +98,7 @@ export default function App() {
 
       {/* Conversion Modals */}
       <DemoModal isOpen={isDemoModalOpen} onClose={handleCloseDemo} />
-      <CallModal isOpen={isCallModalOpen} onClose={handleCloseCall} />
+      <CallModal isOpen={isCallModalOpen} onClose={handleCloseCall} onOpenDemo={handleOpenDemo} />
     </div>
   );
 }

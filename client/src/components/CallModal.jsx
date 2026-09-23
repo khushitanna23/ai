@@ -1,7 +1,7 @@
 import React from 'react';
-import { X, Phone, Bot, ArrowRight, Sparkles, Volume2, Shield } from 'lucide-react';
+import { X, Phone, ArrowRight, Sparkles, Calendar, Zap } from 'lucide-react';
 
-export default function CallModal({ isOpen, onClose }) {
+export default function CallModal({ isOpen, onClose, onOpenDemo }) {
   if (!isOpen) return null;
 
   const handleJumpToLiveDemo = () => {
@@ -12,9 +12,16 @@ export default function CallModal({ isOpen, onClose }) {
     }
   };
 
+  const handleBookDemoCall = () => {
+    onClose();
+    if (onOpenDemo) {
+      onOpenDemo();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/70 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-lg rounded-3xl bg-navy-900 text-white p-6 sm:p-8 shadow-2xl border border-slate-800 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/75 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-lg rounded-3xl bg-[#0B1120] text-white p-6 sm:p-8 shadow-2xl border border-slate-800 text-center">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -24,11 +31,11 @@ export default function CallModal({ isOpen, onClose }) {
           <X className="w-5 h-5" />
         </button>
 
-        <div className="w-16 h-16 rounded-3xl bg-electric-600/20 border border-electric-500/40 text-electric-400 flex items-center justify-center mx-auto mb-5 shadow-lg">
-          <Phone className="w-8 h-8 animate-pulse" />
+        <div className="w-16 h-16 rounded-3xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center mx-auto mb-5 shadow-lg">
+          <Phone className="w-8 h-8 animate-pulse text-blue-400" />
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-electric-400 text-xs font-semibold uppercase tracking-wider mb-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/40 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-3">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Interactive AI Receptionist</span>
         </div>
@@ -38,37 +45,45 @@ export default function CallModal({ isOpen, onClose }) {
         </h3>
 
         <p className="text-xs sm:text-sm text-slate-300 mt-2 mb-6 leading-relaxed max-w-sm mx-auto">
-          Test our natural conversational engine directly in your browser. You can type any question, test dental or contracting scenarios, and toggle real voice audio!
+          Test our natural conversational voice engine right in your browser, or schedule a customized live demo call with our specialist.
         </p>
 
         {/* Feature summary */}
-        <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-left space-y-2 mb-6 text-xs text-slate-300">
+        <div className="bg-[#070C1E] rounded-2xl p-4 border border-slate-800 text-left space-y-2 mb-6 text-xs text-slate-300">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-white">● Voice Latency:</span>
+            <span className="font-semibold text-white">● Voice Response Latency:</span>
             <span className="text-emerald-400 font-mono">Under 400ms</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="font-semibold text-white">● Availability:</span>
-            <span className="text-slate-200">24/7/365</span>
+            <span className="text-slate-200">24/7/365 Non-stop</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-white">● Telephony Integration:</span>
-            <span className="text-electric-400">Twilio / SIP Ready</span>
+            <span className="font-semibold text-white">● Scheduling Integration:</span>
+            <span className="text-blue-400 font-mono">Calendly Ready</span>
           </div>
         </div>
 
         <div className="space-y-3">
           <button
-            onClick={handleJumpToLiveDemo}
-            className="w-full py-3.5 px-6 rounded-xl bg-electric-600 hover:bg-electric-500 text-white font-semibold text-sm shadow-lg shadow-electric-600/30 transition-all flex items-center justify-center gap-2"
+            onClick={handleBookDemoCall}
+            className="w-full py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2"
           >
-            <span>Open Interactive Demo Now</span>
-            <ArrowRight className="w-4 h-4" />
+            <Calendar className="w-4 h-4" />
+            <span>Book a Call (Pick Date & Time)</span>
+          </button>
+
+          <button
+            onClick={handleJumpToLiveDemo}
+            className="w-full py-3 px-6 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-xs transition-all flex items-center justify-center gap-2"
+          >
+            <Zap className="w-3.5 h-3.5 text-blue-400" />
+            <span>Test In-Browser Audio Demo</span>
           </button>
 
           <button
             onClick={onClose}
-            className="w-full py-2.5 px-4 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+            className="w-full py-2 px-4 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
           >
             Close
           </button>

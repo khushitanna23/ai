@@ -8,13 +8,35 @@ const {
   deleteLead,
   getLeadsStats,
 } = require('../models/Lead');
+const { sendCallBookingNotification, NOTIFICATION_EMAIL } = require('../services/emailService');
 
 // POST /api/leads - Book a Demo / Contact inquiry
 router.post('/', async (req, res) => {
   try {
-    const { name, email, phone, company, industry, estimatedCallVolume, notes, tags } = req.body;
+    const {
+      name,
+      clientName,
+      email,
+      clientEmail,
+      phone,
+      clientPhone,
+      company,
+      industry,
+      serviceType,
+      preferredDate,
+      appointmentDate,
+      preferredTime,
+      appointmentTime,
+      estimatedCallVolume,
+      notes,
+      tags,
+    } = req.body;
 
-    if (!name || !email || !phone) {
+    const resolvedName = name || clientName;
+    const resolvedEmail = email || clientEmail;
+    const resolvedPhone = phone || clientPhone;
+
+    if (!resolvedName || !resolvedEmail || !resolvedPhone) {
       return res.status(400).json({
         success: false,
         message: 'Name, email, and phone number are required.',
@@ -22,22 +44,39 @@ router.post('/', async (req, res) => {
     }
 
     const newLead = await saveLead({
-      name,
-      email,
-      phone,
+      name: resolvedName,
+      email: resolvedEmail,
+      phone: resolvedPhone,
       company: company || 'Not specified',
-      industry: industry || 'General Business',
+      industry: industry || serviceType || 'General Business',
       estimatedCallVolume: estimatedCallVolume || '100-500 calls/month',
       notes: notes || '',
       tags: tags || ['Website Demo'],
       source: 'Website Demo Request',
     });
 
-    console.log(`[Vedanco AI] New Demo Request recorded for: ${name} (${email})`);
+    console.log(`[Vedanco AI] New Demo Request recorded for: ${resolvedName} (${resolvedEmail})`);
+
+    // Dispatch email notification to khushitanna310@gmail.com
+    try {
+      await sendCallBookingNotification({
+        clientName: resolvedName,
+        clientEmail: resolvedEmail,
+        clientPhone: resolvedPhone,
+        appointmentDate: appointmentDate || preferredDate || new Date().toISOString().split('T')[0],
+        appointmentTime: appointmentTime || preferredTime || 'Flexible / Next Available',
+        company: company || 'Not specified',
+        industry: industry || serviceType || 'General Business',
+        notes: notes || '',
+        bookedVia: 'Website Demo Form',
+      });
+    } catch (mailErr) {
+      console.error('[Vedanco AI] Error sending lead notification email:', mailErr.message);
+    }
 
     return res.status(201).json({
       success: true,
-      message: 'Demo request received successfully! Our team will contact you within 24 business hours to set up your tailored demonstration.',
+      message: `Demo request received successfully! Details sent to ${NOTIFICATION_EMAIL}.`,
       lead: newLead,
     });
   } catch (error) {

@@ -7,39 +7,79 @@ const {
   updateAppointment,
   deleteAppointment,
 } = require('../models/Appointment');
+const { sendCallBookingNotification, NOTIFICATION_EMAIL } = require('../services/emailService');
 
-// POST /api/appointments - Book a new appointment
+// POST /api/appointments - Book a new demo call / appointment
 router.post('/', async (req, res) => {
   try {
-    const { clientName, clientEmail, clientPhone, company, serviceType, appointmentDate, appointmentTime, timezone, notes, bookedVia } = req.body;
+    const {
+      clientName,
+      name,
+      clientEmail,
+      email,
+      clientPhone,
+      phone,
+      company,
+      serviceType,
+      industry,
+      appointmentDate,
+      preferredDate,
+      appointmentTime,
+      preferredTime,
+      timezone,
+      notes,
+      bookedVia,
+    } = req.body;
 
-    if (!clientName || !clientEmail || !clientPhone || !appointmentDate || !appointmentTime) {
+    const resolvedName = clientName || name;
+    const resolvedEmail = clientEmail || email;
+    const resolvedPhone = clientPhone || phone;
+    const resolvedDate = appointmentDate || preferredDate;
+    const resolvedTime = appointmentTime || preferredTime;
+    const resolvedIndustry = industry || serviceType || 'AI Receptionist Demo';
+
+    if (!resolvedName || !resolvedEmail || !resolvedPhone || !resolvedDate || !resolvedTime) {
       return res.status(400).json({
         success: false,
-        message: 'clientName, clientEmail, clientPhone, appointmentDate, and appointmentTime are required.',
+        message: 'Name, email, phone number, preferred date, and preferred time are required.',
       });
     }
 
-    const newAppt = await saveAppointment({
-      clientName,
-      clientEmail,
-      clientPhone,
+    const appointmentPayload = {
+      clientName: resolvedName,
+      clientEmail: resolvedEmail,
+      clientPhone: resolvedPhone,
       company: company || 'Not specified',
-      serviceType: serviceType || 'Demo & Consultation',
-      appointmentDate,
-      appointmentTime,
-      timezone: timezone || 'America/New_York (EST)',
+      serviceType: resolvedIndustry,
+      appointmentDate: resolvedDate,
+      appointmentTime: resolvedTime,
+      timezone: timezone || 'Local Time',
       status: 'scheduled',
-      bookedVia: bookedVia || 'AI Receptionist Live Engine',
+      bookedVia: bookedVia || 'Website Demo Call Form',
       notes: notes || '',
-    });
+    };
 
-    console.log(`[Vedanco AI] Appointment booked for: ${clientName} on ${appointmentDate} at ${appointmentTime}`);
+    const newAppt = await saveAppointment(appointmentPayload);
+
+    console.log(`[Vedanco AI] Demo Call booked for: ${resolvedName} (${resolvedPhone}) on ${resolvedDate} at ${resolvedTime}`);
+
+    // Dispatch email notification to khushitanna310@gmail.com
+    let emailResult = { success: false };
+    try {
+      emailResult = await sendCallBookingNotification({
+        ...appointmentPayload,
+        industry: resolvedIndustry,
+      });
+    } catch (mailErr) {
+      console.error('[Vedanco AI] Failed to dispatch booking email:', mailErr.message);
+    }
 
     return res.status(201).json({
       success: true,
-      message: `Appointment scheduled successfully for ${appointmentDate} at ${appointmentTime}!`,
+      message: `Demo call scheduled successfully for ${resolvedDate} at ${resolvedTime}! Details sent to ${NOTIFICATION_EMAIL}.`,
       appointment: newAppt,
+      notificationSent: emailResult.success,
+      targetEmail: NOTIFICATION_EMAIL,
     });
   } catch (error) {
     console.error('[Vedanco AI] Error booking appointment:', error);
