@@ -125,6 +125,8 @@ export default function LiveDemoSection({ onOpenDemo }) {
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const chatContainerRef = useRef(null);
+  const isInitialLoad = useRef(true);
 
   const scenario = scenariosData[selectedScenarioKey] || scenariosData.home;
   const ScenarioIcon = scenario.icon;
@@ -153,9 +155,18 @@ export default function LiveDemoSection({ onOpenDemo }) {
     return () => clearInterval(timer);
   }, []);
 
-  // Auto scroll transcript
+  // Auto scroll transcript only inside its internal container, NEVER scrolling the main window
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isInitialLoad.current) {
+      isInitialLoad.current = false;
+      return;
+    }
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   }, [messages, isThinking]);
 
   const speakVoice = (text) => {
@@ -480,7 +491,10 @@ export default function LiveDemoSection({ onOpenDemo }) {
             </div>
 
             {/* Messages Scroll Area */}
-            <div className="p-3.5 sm:p-6 min-h-[250px] sm:min-h-[300px] max-h-[360px] overflow-y-auto space-y-3.5 sm:space-y-4 bg-[#070C1E]/60">
+            <div
+              ref={chatContainerRef}
+              className="p-3.5 sm:p-6 min-h-[250px] sm:min-h-[300px] max-h-[360px] overflow-y-auto space-y-3.5 sm:space-y-4 bg-[#070C1E]/60"
+            >
               {messages.map((msg) => {
                 const isAi = msg.sender === 'ai';
                 return (

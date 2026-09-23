@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ProblemHook from './components/ProblemHook';
@@ -23,6 +23,14 @@ import CallModal from './components/CallModal';
 export default function App() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isCallModalOpen, setIsCallModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Ensure the website always opens at the very top (first page / hero)
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
 
   const CALENDLY_URL = 'https://calendly.com/nachiketdpatel/book-your-free-15-min-call-with-nachiket';
 
