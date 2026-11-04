@@ -65,7 +65,7 @@ export default function App() {
         <SolutionSection onOpenDemo={handleOpenDemo} />
 
         {/* Section 8: Live AI Call Demo (MOST IMPORTANT SECTION) */}
-        <LiveDemoSection onOpenDemo={handleOpenDemo} />
+        <LiveDemoSection onOpenDemo={handleOpenDemo} onOpenCall={handleOpenCall} />
 
         {/* Section 9: How It Works */}
         <HowItWorks />
@@ -102,7 +102,7 @@ export default function App() {
       </main>
 
       {/* Section 20: Footer */}
-      <Footer onOpenDemo={handleOpenDemo} />
+      <Footer onOpenDemo={handleOpenDemo} onOpenCall={handleOpenCall} />
 
       {/* Conversion Modals */}
       <DemoModal isOpen={isDemoModalOpen} onClose={handleCloseDemo} />

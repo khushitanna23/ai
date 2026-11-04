@@ -111,7 +111,7 @@ const scenariosData = {
   },
 };
 
-export default function LiveDemoSection({ onOpenDemo }) {
+export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
   const [activeTab, setActiveTab] = useState('interactive'); // 'interactive' | 'telephony'
   const [selectedScenarioKey, setSelectedScenarioKey] = useState('home'); // Default to Home Services like Image 1
   const [messages, setMessages] = useState([]);
@@ -453,6 +453,14 @@ export default function LiveDemoSection({ onOpenDemo }) {
 
             {/* Audio Toggle & Reset Button */}
             <div className="mt-4 sm:mt-6 space-y-2">
+              <button
+                onClick={onOpenCall}
+                className="w-full py-2.5 px-3 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
+              >
+                <Phone className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+                <span>Call Our AI (Receive Real Call)</span>
+              </button>
+
               <button
                 onClick={() => setSoundEnabled(!soundEnabled)}
                 className={`w-full py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-colors ${

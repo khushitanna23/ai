@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mail, ShieldCheck } from 'lucide-react';
 
-export default function Footer({ onOpenDemo }) {
+export default function Footer({ onOpenDemo, onOpenCall }) {
   const solutions = [
     'AI Receptionist',
     'AI Call Agents',
@@ -12,6 +12,7 @@ export default function Footer({ onOpenDemo }) {
 
   const company = [
     { name: 'About Vedanco', href: '#how-it-works' },
+    { name: 'Call Our AI (Live Demo)', href: '#', isCall: true },
     { name: 'Book a Demo', href: '#', isDemo: true },
     { name: 'Pricing', href: '#pricing' },
     { name: 'FAQ', href: '#faq' },
@@ -100,6 +101,14 @@ export default function Footer({ onOpenDemo }) {
                       className="text-slate-400 hover:text-white transition-colors text-left"
                     >
                       {item.name}
+                    </button>
+                  ) : item.isCall ? (
+                    <button
+                      onClick={onOpenCall}
+                      className="text-blue-400 hover:text-blue-300 font-medium transition-colors text-left flex items-center gap-1.5"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                      <span>{item.name}</span>
                     </button>
                   ) : (
                     <a
