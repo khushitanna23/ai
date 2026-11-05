@@ -137,7 +137,7 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
       {
         id: 'init_' + Date.now(),
         sender: 'ai',
-        name: 'Vedanco AI Receptionist',
+        name: 'Sneha (Vedanco AI)',
         text: scenario.initialGreeting,
         timestamp: '04:55 PM',
       },
@@ -242,7 +242,7 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
         const aiMsg = {
           id: 'ai_' + Date.now(),
           sender: 'ai',
-          name: 'Vedanco AI Receptionist',
+          name: 'Sneha (Vedanco AI)',
           text: aiText,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         };
@@ -259,7 +259,7 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
         const aiMsg = {
           id: 'ai_' + Date.now(),
           sender: 'ai',
-          name: 'Vedanco AI Receptionist',
+          name: 'Sneha (Vedanco AI)',
           text: aiText,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         };
@@ -277,7 +277,7 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
       {
         id: 'init_' + Date.now(),
         sender: 'ai',
-        name: 'Vedanco AI Receptionist',
+        name: 'Sneha (Vedanco AI)',
         text: scenario.initialGreeting,
         timestamp: '04:55 PM',
       },
@@ -642,7 +642,7 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
             <div className="bg-[#070C1E] p-3 sm:p-3.5 rounded-xl border border-slate-800/80 space-y-1">
               <div className="text-slate-400 text-[10px] uppercase font-bold">CALLER INTENT & DATA</div>
               <div className="text-white font-semibold">{currentIntent}</div>
-              <div className="text-slate-400 text-[11px]">Caller: Inbound Caller • +1 (555) 234-1921</div>
+              <div className="text-slate-400 text-[11px]">Caller: Sneha • +91 9557149619</div>
             </div>
 
             <div className="bg-[#070C1E] p-3 sm:p-3.5 rounded-xl border border-slate-800/80 space-y-1">

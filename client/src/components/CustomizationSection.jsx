@@ -166,7 +166,7 @@ export default function CustomizationSection({ onOpenDemo }) {
                   ACTIVE GREETING SCRIPT
                 </div>
                 <div className="bg-[#070C1E] p-3 rounded-xl border border-slate-800/80 text-xs text-slate-200 italic leading-relaxed">
-                  "Thank you for calling Apex Dental Care. This is Vedanco, our AI receptionist. How may I assist you today?"
+                  "Thank you for calling Apex Dental Care. This is Sneha, our AI receptionist. How may I assist you today?"
                 </div>
               </div>
 
@@ -177,7 +177,7 @@ export default function CustomizationSection({ onOpenDemo }) {
                     VOICE MODEL
                   </div>
                   <div className="text-xs text-white font-semibold">
-                    Eleanor (US Professional, Warm)
+                    Sneha (AI Receptionist, Natural & Warm)
                   </div>
                 </div>
                 <div className="bg-[#070C1E] p-3 rounded-xl border border-slate-800/80">

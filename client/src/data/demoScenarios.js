@@ -142,9 +142,9 @@ export const getLocalAiResponse = (userInput, scenarioId = 'general') => {
   }
 
   if (query.includes('hi') || query.includes('hello') || query.includes('hey') || query.includes('good morning') || query.includes('good afternoon')) {
-    return "Hello! I am your Vedanco AI receptionist. You can ask me any question about our 24/7 call answering, pricing, appointment booking, CRM integrations, or industry-specific workflows.";
+    return "Hello! I am Sneha, your Vedanco AI receptionist. You can ask me any question about our 24/7 call answering, pricing, appointment booking, CRM integrations, or industry-specific workflows.";
   }
 
   // Fallback
-  return "I'm the Vedanco AI demo receptionist. I can help explain our AI receptionist, call handling, lead qualification, appointment booking, integrations, pricing, and demo process. What would you like to know?";
+  return "I'm Sneha, the Vedanco AI demo receptionist. I can help explain our AI receptionist, call handling, lead qualification, appointment booking, integrations, pricing, and demo process. What would you like to know?";
 };

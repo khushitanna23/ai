@@ -114,12 +114,12 @@ export default function Hero({ onOpenDemo, onOpenCall }) {
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-xs sm:text-sm text-white">Sarah M.</span>
+                      <span className="font-bold text-xs sm:text-sm text-white">Sneha</span>
                       <span className="text-[9px] sm:text-[10px] text-blue-300 font-medium bg-blue-950/80 border border-blue-500/40 px-1.5 py-0.5 rounded whitespace-nowrap">
                         New Customer
                       </span>
                     </div>
-                    <div className="text-[11px] sm:text-xs text-slate-400 mt-0.5 truncate">+1 (555) 234-1921</div>
+                    <div className="text-[11px] sm:text-xs text-slate-400 mt-0.5 truncate">+91 9557149619</div>
                   </div>
                 </div>
 
