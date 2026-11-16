@@ -5,19 +5,39 @@ const AppointmentSchema = new mongoose.Schema(
   {
     clientName: {
       type: String,
-      required: [true, 'Client name is required'],
+      default: 'Phone Caller',
+      trim: true,
+    },
+    customerName: {
+      type: String,
+      trim: true,
+    },
+    callerName: {
+      type: String,
       trim: true,
     },
     clientEmail: {
       type: String,
-      required: [true, 'Client email is required'],
       trim: true,
       lowercase: true,
-      match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address'],
+      default: 'caller@vedanco.ai',
+    },
+    customerEmail: {
+      type: String,
+      trim: true,
+      lowercase: true,
     },
     clientPhone: {
       type: String,
       required: [true, 'Client phone number is required'],
+      trim: true,
+    },
+    customerPhone: {
+      type: String,
+      trim: true,
+    },
+    callerPhone: {
+      type: String,
       trim: true,
     },
     company: {
@@ -27,29 +47,55 @@ const AppointmentSchema = new mongoose.Schema(
     },
     serviceType: {
       type: String,
-      default: 'Demo & Consultation',
+      default: 'AI Voice Receptionist Demo & Consultation',
       trim: true,
+    },
+    type: {
+      type: String,
+      default: 'Discovery Consultation',
     },
     appointmentDate: {
       type: String,
       required: [true, 'Appointment date is required (YYYY-MM-DD)'],
     },
+    date: {
+      type: String,
+    },
+    scheduledDate: {
+      type: String,
+    },
     appointmentTime: {
       type: String,
       required: [true, 'Appointment time is required (e.g. 10:00 AM)'],
     },
+    timeSlot: {
+      type: String,
+    },
+    scheduledTime: {
+      type: String,
+    },
+    scheduledDateTime: {
+      type: Date,
+    },
+    bookingReference: {
+      type: String,
+      trim: true,
+    },
+    callId: {
+      type: String,
+      trim: true,
+    },
     timezone: {
       type: String,
-      default: 'America/New_York (EST)',
+      default: 'Asia/Kolkata (IST)',
     },
     status: {
       type: String,
-      enum: ['scheduled', 'confirmed', 'completed', 'cancelled', 'rescheduled'],
       default: 'scheduled',
     },
     bookedVia: {
       type: String,
-      default: 'AI Receptionist Live Engine',
+      default: 'AI Voice Call (Sneha)',
       trim: true,
     },
     notes: {
@@ -59,6 +105,7 @@ const AppointmentSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    strict: false,
   }
 );
 
@@ -90,19 +137,48 @@ let memoryAppointments = [
 ];
 
 const saveAppointment = async (data) => {
+  const refCode = data.bookingReference || 'VED-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+  const phone = data.clientPhone || data.customerPhone || data.callerPhone || data.phone || '+91 9557149619';
+  const name = data.clientName || data.customerName || data.callerName || data.name || `Caller (${phone})`;
+  const digits = phone.replace(/\D/g, '') || 'caller';
+  const email = data.clientEmail || data.customerEmail || data.email || `${digits}@vedanco.ai`;
+  const date = data.appointmentDate || data.date || data.scheduledDate || data.preferredDate || new Date().toISOString().split('T')[0];
+  const time = data.appointmentTime || data.timeSlot || data.scheduledTime || data.preferredTime || data.time || '11:00 AM';
+
+  const appointmentRecord = {
+    ...data,
+    bookingReference: refCode,
+    clientName: name,
+    customerName: name,
+    callerName: name,
+    clientPhone: phone,
+    customerPhone: phone,
+    callerPhone: phone,
+    clientEmail: email,
+    customerEmail: email,
+    appointmentDate: date,
+    date: date,
+    scheduledDate: date,
+    appointmentTime: time,
+    timeSlot: time,
+    scheduledTime: time,
+    company: data.company || 'Individual / Not specified',
+    serviceType: data.serviceType || data.type || 'AI Voice Receptionist Demo & Consultation',
+    type: data.type || data.serviceType || 'Discovery Consultation',
+    timezone: data.timezone || 'Asia/Kolkata (IST)',
+    status: data.status || 'scheduled',
+    bookedVia: data.bookedVia || 'AI Voice Call (Sneha)',
+    notes: data.notes || '',
+    callId: data.callId || '',
+  };
+
   if (getIsConnected() && MongoAppointmentModel) {
-    const appt = new MongoAppointmentModel(data);
+    const appt = new MongoAppointmentModel(appointmentRecord);
     return await appt.save();
   } else {
     const appt = {
       _id: 'appt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9),
-      ...data,
-      company: data.company || 'Individual / Not specified',
-      serviceType: data.serviceType || 'Demo & Consultation',
-      timezone: data.timezone || 'America/New_York (EST)',
-      status: data.status || 'scheduled',
-      bookedVia: data.bookedVia || 'AI Receptionist Live Engine',
-      notes: data.notes || '',
+      ...appointmentRecord,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -115,27 +191,40 @@ const getAppointments = async (filter = {}) => {
   if (getIsConnected() && MongoAppointmentModel) {
     const query = {};
     if (filter.status) query.status = filter.status;
-    if (filter.date) query.appointmentDate = filter.date;
+    if (filter.date) {
+      query.$or = [{ appointmentDate: filter.date }, { date: filter.date }, { scheduledDate: filter.date }];
+    }
     if (filter.search) {
       const regex = new RegExp(filter.search, 'i');
-      query.$or = [{ clientName: regex }, { clientEmail: regex }, { clientPhone: regex }];
+      query.$or = [
+        { clientName: regex },
+        { customerName: regex },
+        { callerName: regex },
+        { clientEmail: regex },
+        { clientPhone: regex },
+        { customerPhone: regex },
+        { callerPhone: regex },
+        { bookingReference: regex },
+      ];
     }
-    return await MongoAppointmentModel.find(query).sort({ appointmentDate: 1, appointmentTime: 1 });
+    return await MongoAppointmentModel.find(query).sort({ appointmentDate: 1, date: 1, appointmentTime: 1, timeSlot: 1 });
   } else {
     let results = [...memoryAppointments];
     if (filter.status) {
       results = results.filter((a) => a.status === filter.status);
     }
     if (filter.date) {
-      results = results.filter((a) => a.appointmentDate === filter.date);
+      results = results.filter((a) => a.appointmentDate === filter.date || a.date === filter.date || a.scheduledDate === filter.date);
     }
     if (filter.search) {
       const q = filter.search.toLowerCase();
       results = results.filter(
         (a) =>
-          a.clientName.toLowerCase().includes(q) ||
-          a.clientEmail.toLowerCase().includes(q) ||
-          a.clientPhone.includes(q)
+          (a.clientName && a.clientName.toLowerCase().includes(q)) ||
+          (a.customerName && a.customerName.toLowerCase().includes(q)) ||
+          (a.clientEmail && a.clientEmail.toLowerCase().includes(q)) ||
+          (a.clientPhone && a.clientPhone.includes(q)) ||
+          (a.bookingReference && a.bookingReference.toLowerCase().includes(q))
       );
     }
     return results;

@@ -221,6 +221,7 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
 
     try {
       let aiText = '';
+      let bookedAppt = null;
       const response = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -234,6 +235,11 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
       if (response.ok) {
         const data = await response.json();
         aiText = data.response;
+        bookedAppt = data.appointment;
+        if (data.isAppointmentBooked && data.appointment) {
+          setCurrentIntent(`Calendar Appointment Booked (${data.appointment.appointmentDate} ${data.appointment.appointmentTime})`);
+          setQualificationStatus(`Confirmed & Stored in MongoDB (Ref: ${data.appointment.bookingReference})`);
+        }
       } else {
         aiText = getLocalAiResponse(query, selectedScenarioKey);
       }
@@ -244,6 +250,7 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
           sender: 'ai',
           name: 'Sneha (Vedanco AI)',
           text: aiText,
+          appointment: bookedAppt,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         };
         setMessages((prev) => [...prev, aiMsg]);
@@ -533,6 +540,34 @@ export default function LiveDemoSection({ onOpenDemo, onOpenCall }) {
                       >
                         {msg.text}
                       </div>
+
+                      {msg.appointment && (
+                        <div className="mt-2 p-3 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-left text-xs text-slate-200 space-y-1.5 w-full animate-fadeIn shadow-md">
+                          <div className="flex items-center justify-between text-emerald-400 font-bold text-[11px]">
+                            <span className="flex items-center gap-1.5">
+                              <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                              <span>Appointment Stored in MongoDB</span>
+                            </span>
+                            <span className="bg-emerald-500/20 text-emerald-300 text-[9px] px-2 py-0.5 rounded-full border border-emerald-500/30">
+                              MongoDB Synced
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 pt-1 border-t border-emerald-500/20 text-[11px] text-slate-300">
+                            <div>
+                              <span className="text-slate-400 text-[10px] uppercase block">Date</span>
+                              <strong className="text-white font-mono">{msg.appointment.appointmentDate || msg.appointment.date}</strong>
+                            </div>
+                            <div>
+                              <span className="text-slate-400 text-[10px] uppercase block">Time Slot</span>
+                              <strong className="text-white font-mono">{msg.appointment.appointmentTime || msg.appointment.timeSlot}</strong>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+                            <span className="text-blue-300 font-mono font-medium">Ref: {msg.appointment.bookingReference}</span>
+                            <span className="text-emerald-400 font-medium">Status: {msg.appointment.status}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {!isAi && (

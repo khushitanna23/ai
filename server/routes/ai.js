@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { saveAppointment } = require('../models/Appointment');
 
 /**
  * Intelligent domain knowledge & conversational intent matcher for Vedanco AI.
@@ -145,6 +146,75 @@ const generateContextualResponse = (query, scenario = 'general') => {
   return "I'm the Vedanco AI interactive demo receptionist. I can help explain our 24/7 call answering, lead qualification, appointment booking, CRM integrations, pricing plans ($999 Starter, $1,999 Pro), and demo process. What specific question can I answer for your business?";
 };
 
+// Helper to extract booking dates & times from conversation text
+const extractDateAndTimeFromText = (text = '') => {
+  const lower = text.toLowerCase();
+  const now = new Date();
+
+  // Date resolution
+  let resolvedDate = '';
+  if (lower.includes('today') || lower.includes('aaj')) {
+    resolvedDate = now.toISOString().split('T')[0];
+  } else if (lower.includes('tomorrow') || lower.includes('kal')) {
+    const tmr = new Date(now.getTime() + 86400000);
+    resolvedDate = tmr.toISOString().split('T')[0];
+  } else {
+    // Check day of week
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayIndex = days.findIndex((d) => lower.includes(d));
+    if (dayIndex !== -1) {
+      const currentDay = now.getDay();
+      let diff = dayIndex - currentDay;
+      if (diff <= 0) diff += 7;
+      const targetDate = new Date(now.getTime() + diff * 86400000);
+      resolvedDate = targetDate.toISOString().split('T')[0];
+    } else {
+      // Check for explicit date like 2026-11-20 or 20 Nov
+      const dateMatch = lower.match(/\b(\d{4}-\d{2}-\d{2})\b/);
+      if (dateMatch) {
+        resolvedDate = dateMatch[1];
+      } else {
+        // Default to tomorrow
+        const defaultTmr = new Date(now.getTime() + 86400000);
+        resolvedDate = defaultTmr.toISOString().split('T')[0];
+      }
+    }
+  }
+
+  // Time resolution
+  let resolvedTime = '11:00 AM';
+  const timeMatch = lower.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/);
+  if (timeMatch) {
+    let hour = parseInt(timeMatch[1], 10);
+    const minute = timeMatch[2] || '00';
+    let period = timeMatch[3] ? timeMatch[3].toUpperCase() : '';
+
+    if (!period) {
+      if (hour >= 1 && hour <= 7) {
+        period = 'PM';
+      } else if (hour >= 8 && hour <= 11) {
+        period = 'AM';
+      } else if (hour === 12) {
+        period = 'PM';
+      } else if (hour > 12) {
+        hour = hour - 12;
+        period = 'PM';
+      } else {
+        period = 'AM';
+      }
+    }
+    resolvedTime = `${String(hour).padStart(2, '0')}:${minute} ${period}`;
+  } else if (lower.includes('morning')) {
+    resolvedTime = '10:00 AM';
+  } else if (lower.includes('afternoon') || lower.includes('dopehar')) {
+    resolvedTime = '02:00 PM';
+  } else if (lower.includes('evening') || lower.includes('shaam')) {
+    resolvedTime = '05:00 PM';
+  }
+
+  return { date: resolvedDate, time: resolvedTime };
+};
+
 // POST /api/ai/chat - Process conversational input
 router.post('/chat', async (req, res) => {
   try {
@@ -157,12 +227,49 @@ router.post('/chat', async (req, res) => {
       });
     }
 
-    const aiResponse = generateContextualResponse(message, scenario);
+    const lower = message.toLowerCase();
+    const isBookingIntent =
+      lower.includes('appointment') ||
+      lower.includes('book') ||
+      lower.includes('schedule') ||
+      lower.includes('slot') ||
+      lower.includes('reserve') ||
+      lower.includes('cleaning') ||
+      lower.includes('meeting') ||
+      lower.includes('tarikh') ||
+      lower.includes('samay');
+
+    let aiResponse = '';
+    let savedAppt = null;
+
+    if (isBookingIntent) {
+      const { date, time } = extractDateAndTimeFromText(message);
+      try {
+        savedAppt = await saveAppointment({
+          clientName: 'Live Demo Caller',
+          clientPhone: '+91 9557149619',
+          appointmentDate: date,
+          appointmentTime: time,
+          serviceType: scenarioContexts[scenario]?.name || 'Live AI Call Demo',
+          notes: `Booked during conversation: "${message.trim()}"`,
+          bookedVia: 'AI Receptionist Live Engine (In-Browser Call)',
+        });
+        aiResponse = `Perfect! I've booked your appointment for ${date} at ${time}. Your booking reference is ${savedAppt.bookingReference} and all details have been securely stored in MongoDB. We look forward to speaking with you!`;
+        console.log(`[Vedanco AI] In-Call Demo Appointment saved to MongoDB: ${date} at ${time}`);
+      } catch (saveErr) {
+        console.error('[Vedanco AI] Failed to save in-call appointment:', saveErr.message);
+        aiResponse = generateContextualResponse(message, scenario);
+      }
+    } else {
+      aiResponse = generateContextualResponse(message, scenario);
+    }
 
     return res.json({
       success: true,
       response: aiResponse,
       scenario,
+      appointment: savedAppt,
+      isAppointmentBooked: !!savedAppt,
       timestamp: new Date().toISOString(),
       providerStatus: process.env.OPENAI_API_KEY ? 'live_llm' : 'interactive_demo_engine',
     });

@@ -12,6 +12,7 @@ const callsRouter = require('./routes/calls');
 const contactsRouter = require('./routes/contacts');
 const aiRouter = require('./routes/ai');
 const statsRouter = require('./routes/stats');
+const webhooksRouter = require('./routes/webhooks');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -70,6 +71,8 @@ app.use('/api/calls', callsRouter);
 app.use('/api/contacts', contactsRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/stats', statsRouter);
+app.use('/api/webhooks', webhooksRouter);
+app.use('/api/webhook', webhooksRouter);
 
 // Serve client build in production if available
 const clientDistPath = path.join(__dirname, '../client/dist');

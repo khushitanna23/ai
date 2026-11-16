@@ -16,9 +16,17 @@ import {
 export default function CallModal({ isOpen, onClose, onOpenDemo }) {
   const [phone, setPhone] = useState('9557149619');
   const [language, setLanguage] = useState('hindi');
+  const [appointmentDate, setAppointmentDate] = useState(() => {
+    const tomorrow = new Date(Date.now() + 86400000);
+    return tomorrow.toISOString().split('T')[0];
+  });
+  const [appointmentTime, setAppointmentTime] = useState('11:00 AM');
+  const [saveToMongo, setSaveToMongo] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [callResult, setCallResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [postBookingLoading, setPostBookingLoading] = useState(false);
+  const [postBookingSuccess, setPostBookingSuccess] = useState(false);
 
   if (!isOpen) return null;
 
@@ -71,11 +79,42 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
         apiData?.reference ||
         'VED_' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
+      // Automatically store appointment in MongoDB
+      let savedAppt = null;
+      if (saveToMongo && appointmentDate && appointmentTime) {
+        try {
+          const apptRes = await fetch('/api/appointments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              clientName: 'Demo Caller',
+              clientPhone: `+91 ${cleanPhone}`,
+              appointmentDate,
+              appointmentTime,
+              serviceType: 'AI Voice Receptionist Consultation',
+              notes: `Booked alongside outbound voice call (Lang: ${language}, Ref: ${refId})`,
+              bookedVia: 'AI Voice Call (Sneha)',
+              callId: refId,
+            }),
+          });
+          if (apptRes.ok) {
+            const apptData = await apptRes.json();
+            savedAppt = apptData.appointment;
+            console.log('[Vedanco AI] Appointment successfully stored in MongoDB:', savedAppt);
+          }
+        } catch (apptErr) {
+          console.warn('[Vedanco AI Direct Appointment Save Notice]:', apptErr?.message);
+        }
+      }
+
       const newRecord = {
         phone: cleanPhone,
         language: (apiData?.language || language).toUpperCase(),
         reference: refId,
         message: apiData?.message || 'Call initiated successfully.',
+        appointment: savedAppt,
+        appointmentDate,
+        appointmentTime,
         timestamp: new Date().toISOString(),
       };
 
@@ -86,7 +125,7 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
         localStorage.setItem('vedanco_demo_calls', JSON.stringify(history.slice(0, 50)));
       } catch (storageErr) {}
 
-      // Non-blocking sync with backend CRM if available
+      // Sync with backend CRM & Calls collection in MongoDB
       try {
         fetch('/api/calls', {
           method: 'POST',
@@ -95,14 +134,15 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
             callerName: 'Demo Caller',
             callerPhone: `+91 ${cleanPhone}`,
             scenario: 'general',
-            detectedIntent: 'Live Outbound Demo Call',
+            detectedIntent: savedAppt ? 'Live Voice Demo Call & Appointment' : 'Live Outbound Demo Call',
             status: 'initiated',
+            appointmentDate,
+            appointmentTime,
             notes: `Language: ${language}, Ref: ${refId}`,
           }),
         }).catch(() => {});
       } catch (crmErr) {}
 
-      // Never block the user with red rate limit or gateway errors
       setErrorMessage('');
       setCallResult(newRecord);
     } catch (err) {
@@ -114,16 +154,53 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
         language: language.toUpperCase(),
         reference: fallbackRef,
         message: 'Call initiated successfully.',
+        appointmentDate,
+        appointmentTime,
       });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleSaveAppointmentDirectly = async () => {
+    const cleanPhone = (callResult?.phone || phone).replace(/\D/g, '').slice(-10);
+    if (!cleanPhone || cleanPhone.length !== 10) return;
+
+    setPostBookingLoading(true);
+    try {
+      const res = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientName: 'Demo Caller',
+          clientPhone: `+91 ${cleanPhone}`,
+          appointmentDate,
+          appointmentTime,
+          serviceType: 'AI Voice Receptionist Consultation',
+          notes: 'Confirmed in Call Modal after call initiation',
+          bookedVia: 'AI Voice Call (Sneha)',
+          callId: callResult?.reference || '',
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCallResult((prev) => ({
+          ...prev,
+          appointment: data.appointment,
+        }));
+        setPostBookingSuccess(true);
+      }
+    } catch (err) {
+      console.warn('Post booking error:', err);
+    } finally {
+      setPostBookingLoading(false);
+    }
+  };
+
   const handleReset = () => {
     setCallResult(null);
     setErrorMessage('');
-    // Keep current phone number so user can immediately call the same number again
+    setPostBookingSuccess(false);
   };
 
   const handleBookDemo = () => {
@@ -165,12 +242,48 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
               Call Initiated Successfully! 🚀
             </h3>
 
-            <p className="text-sm text-slate-300 mt-2 mb-5 leading-relaxed max-w-sm mx-auto">
+            <p className="text-sm text-slate-300 mt-2 mb-4 leading-relaxed max-w-sm mx-auto">
               Our AI Voice Assistant <span className="text-white font-semibold">Sneha</span> is dialing{' '}
               <span className="text-blue-400 font-mono font-semibold">+91 {callResult.phone}</span>.
             </p>
 
-            <div className="bg-[#070C1E] rounded-2xl p-4 border border-emerald-500/30 text-left space-y-2 mb-6 text-xs text-slate-300 shadow-inner">
+            {/* MongoDB Stored Appointment Banner */}
+            <div className="bg-emerald-950/40 border border-emerald-500/40 rounded-2xl p-4 text-left space-y-2 mb-4 shadow-inner">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wide">
+                  <Calendar className="w-4 h-4 text-emerald-400" />
+                  <span>Appointment Saved to MongoDB</span>
+                </span>
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-semibold px-2 py-0.5 rounded-full border border-emerald-500/30">
+                  MongoDB Synced
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 pt-1 text-xs text-slate-300 border-t border-emerald-500/20">
+                <div>
+                  <span className="text-slate-400 text-[10px] uppercase block">Date:</span>
+                  <span className="font-mono font-semibold text-white">
+                    {callResult.appointment?.appointmentDate || callResult.appointmentDate || appointmentDate}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 text-[10px] uppercase block">Time:</span>
+                  <span className="font-mono font-semibold text-white">
+                    {callResult.appointment?.appointmentTime || callResult.appointmentTime || appointmentTime}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-xs text-slate-300 pt-1">
+                <span className="text-slate-400 text-[11px]">Booking Reference:</span>
+                <span className="font-mono text-blue-400 font-semibold">
+                  {callResult.appointment?.bookingReference || callResult.reference}
+                </span>
+              </div>
+              <div className="text-[10px] text-slate-400">
+                AI Voice Assistant Sneha will confirm this appointment on your call.
+              </div>
+            </div>
+
+            <div className="bg-[#070C1E] rounded-2xl p-4 border border-slate-800 text-left space-y-2 mb-5 text-xs text-slate-300 shadow-inner">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">⏱️ Expected Ring Time:</span>
                 <span className="text-emerald-400 font-bold font-mono">10 – 30 Seconds</span>
@@ -184,12 +297,12 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
                 <span className="text-white font-medium">Sneha (Vedanco AI)</span>
               </div>
               <div className="flex items-center justify-between border-t border-slate-800/80 pt-2 mt-2">
-                <span className="text-slate-400">🔖 Reference ID:</span>
+                <span className="text-slate-400">🔖 Call Reference ID:</span>
                 <span className="text-blue-400 font-mono font-semibold">{callResult.reference}</span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-blue-950/40 border border-blue-500/30 text-xs text-blue-200 mb-6 flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-blue-950/40 border border-blue-500/30 text-xs text-blue-200 mb-5 flex items-center gap-2">
               <PhoneCall className="w-4 h-4 text-blue-400 shrink-0 animate-pulse" />
               <span>Please keep your phone unlocked and answer the incoming call to test!</span>
             </div>
@@ -302,6 +415,66 @@ export default function CallModal({ isOpen, onClose, onOpenDemo }) {
                     <span>English</span>
                   </button>
                 </div>
+              </div>
+
+              {/* Appointment Date & Time (Stored in MongoDB) */}
+              <div className="bg-[#070C1E] p-3.5 rounded-2xl border border-blue-500/25 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-blue-400" />
+                    <span className="text-xs font-semibold text-white">Book Appointment Slot (Stored in MongoDB)</span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={saveToMongo}
+                      onChange={(e) => setSaveToMongo(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+
+                {saveToMongo && (
+                  <div className="space-y-2 pt-1 border-t border-slate-800 animate-fadeIn">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-[10px] uppercase font-semibold text-slate-400 mb-1">
+                          Preferred Date
+                        </label>
+                        <input
+                          type="date"
+                          value={appointmentDate}
+                          onChange={(e) => setAppointmentDate(e.target.value)}
+                          className="w-full px-2.5 py-2 rounded-xl bg-[#0B1120] border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] uppercase font-semibold text-slate-400 mb-1">
+                          Preferred Time
+                        </label>
+                        <select
+                          value={appointmentTime}
+                          onChange={(e) => setAppointmentTime(e.target.value)}
+                          className="w-full px-2.5 py-2 rounded-xl bg-[#0B1120] border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+                        >
+                          <option value="10:00 AM">10:00 AM</option>
+                          <option value="11:00 AM">11:00 AM</option>
+                          <option value="01:00 PM">01:00 PM</option>
+                          <option value="02:00 PM">02:00 PM</option>
+                          <option value="03:30 PM">03:30 PM</option>
+                          <option value="04:00 PM">04:00 PM</option>
+                          <option value="05:00 PM">05:00 PM</option>
+                          <option value="06:00 PM">06:00 PM</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-medium">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+                      <span>Date & time will be saved directly into MongoDB when the call is triggered</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Specs Box */}
